@@ -1,9 +1,9 @@
-package com.pixelsense.mediaservices.service;
+package com.pixels.mediaservices.service;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.pixelsense.mediaservices.model.Media;
+import com.pixels.mediaservices.model.Media;
 
 
 public interface MediaService {

@@ -1,4 +1,4 @@
-package com.pixelsense.mediaservices.exception;
+package com.pixels.mediaservices.exception;
 
 import java.io.Serializable;
 

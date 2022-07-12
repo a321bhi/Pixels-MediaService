@@ -1,12 +1,13 @@
-package com.pixelsense.mediaservices.service;
+package com.pixels.mediaservices.service;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.pixelsense.mediaservices.doa.MediaRepository;
-import com.pixelsense.mediaservices.model.Media;
+
+import com.pixels.mediaservices.doa.MediaRepository;
+import com.pixels.mediaservices.model.Media;
 
 
 @Service

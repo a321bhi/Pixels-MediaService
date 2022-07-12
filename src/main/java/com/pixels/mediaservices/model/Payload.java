@@ -1,4 +1,4 @@
-package com.pixelsense.mediaservices.model;
+package com.pixels.mediaservices.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;

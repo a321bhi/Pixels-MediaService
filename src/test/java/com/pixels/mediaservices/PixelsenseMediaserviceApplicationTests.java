@@ -1,4 +1,4 @@
-package com.axisbank.pixelsense.mediaservice;
+package com.pixels.mediaservices;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

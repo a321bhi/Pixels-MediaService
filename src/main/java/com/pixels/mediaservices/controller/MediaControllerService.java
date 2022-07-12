@@ -1,4 +1,4 @@
-package com.pixelsense.mediaservices.controller;
+package com.pixels.mediaservices.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pixelsense.mediaservices.exception.PostNotFoundException;
-import com.pixelsense.mediaservices.model.Media;
-import com.pixelsense.mediaservices.model.Payload;
-import com.pixelsense.mediaservices.service.MediaServiceImpl;
+import com.pixels.mediaservices.exception.PostNotFoundException;
+import com.pixels.mediaservices.model.Media;
+import com.pixels.mediaservices.model.Payload;
+import com.pixels.mediaservices.service.MediaServiceImpl;
 
 @RestController
 @RequestMapping("/service")
@@ -41,11 +41,6 @@ public class MediaControllerService {
 		Media inputMedia = new Media(payload.getMediaId(), payload.getMediaDate(), payload.getMediaTags(),
 				payload.getMediaCaption());
 		inputMedia.setMediaEncodedData(payload.getImageAsBase64());
-//		try {
-//			inputMedia.setImage(new Binary(BsonBinarySubType.BINARY, payload.getImage().getBytes()));
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 		mediaServiceImpl.addMedia(inputMedia);
 		return new ResponseEntity<String>("data has been added", HttpStatus.OK);
 	}
@@ -60,13 +55,8 @@ public class MediaControllerService {
 			throw new PostNotFoundException();
 		} else {
 			outputMedia = media.get();
-		
-				 payload = new Payload(
-						outputMedia.getMediaId(),
-						outputMedia.getMediaDate(),
-						outputMedia.getMediaTags(), 
-						outputMedia.getMediaCaption(),
-						outputMedia.getMediaEncodedData());
+			payload = new Payload(outputMedia.getMediaId(), outputMedia.getMediaDate(), outputMedia.getMediaTags(),
+						outputMedia.getMediaCaption(),outputMedia.getMediaEncodedData());
 			return payload;
 		}
 	}
@@ -84,14 +74,8 @@ public class MediaControllerService {
 //				throw new PostNotFoundException();
 			} else {
 				outputMedia = media.get();
-				
-					 payload = new Payload(
-							outputMedia.getMediaId(),
-							outputMedia.getMediaDate(),
-							outputMedia.getMediaTags(), 
-							outputMedia.getMediaCaption(),
-							outputMedia.getMediaEncodedData());
-				
+				payload = new Payload(outputMedia.getMediaId(), outputMedia.getMediaDate(), outputMedia.getMediaTags(),
+							outputMedia.getMediaCaption(),outputMedia.getMediaEncodedData());
 				outputArrayOfPayload.add(payload);
 			}
 		}

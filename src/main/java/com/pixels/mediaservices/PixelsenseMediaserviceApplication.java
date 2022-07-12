@@ -1,4 +1,4 @@
-package com.pixelsense.mediaservices;
+package com.pixels.mediaservices;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

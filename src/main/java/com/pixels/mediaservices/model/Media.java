@@ -1,4 +1,4 @@
-package com.pixelsense.mediaservices.model;
+package com.pixels.mediaservices.model;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,17 +16,11 @@ public class Media {
 	@Id
 	private String mediaId;
 	private Date mediaDate;
-//	private Binary image;
-	private String mediaEncodedData;
+	private String mediaEncodedData="";
 	private List<String> mediaTags = new ArrayList<>();
 	private String mediaCaption;
 	
-//	public Binary getImage() {
-//		return image;
-//	}
-//	public void setImage(Binary image) {
-//		this.image = image;
-//	}
+
 
 	public Media() {
 		super();

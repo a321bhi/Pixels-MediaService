@@ -8,11 +8,11 @@
 		<version>2.7.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>pixelsense-mediaservice</artifactId>
+	<groupId>com.pixels</groupId>
+	<artifactId>pixels-mediaservice</artifactId>
 	<version>1</version>
-	<name>pixelsense-mediaservice</name>
-	<description>Media microservice for PixelSense app.</description>
+	<name>pixels-mediaservice</name>
+	<description>Media microservice for Pixels app.</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>

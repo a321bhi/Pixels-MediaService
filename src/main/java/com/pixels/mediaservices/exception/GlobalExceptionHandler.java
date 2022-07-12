@@ -1,4 +1,4 @@
-package com.pixelsense.mediaservices.exception;
+package com.pixels.mediaservices.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
