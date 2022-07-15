@@ -10,7 +10,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(value = { PostNotFoundException.class })
 	public ResponseEntity<String> postNotFoundExceptionHandler() {
-		return new ResponseEntity<String>("Post not found or does not exist..", HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>("Post not found or does not exist..", HttpStatus.NOT_FOUND);
 	}
 
 }

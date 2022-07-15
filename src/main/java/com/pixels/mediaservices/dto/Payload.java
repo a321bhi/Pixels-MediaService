@@ -1,10 +1,11 @@
-package com.pixels.mediaservices.model;
+package com.pixels.mediaservices.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.annotation.Transient;
 import org.springframework.web.multipart.MultipartFile;
 
 public class Payload implements Serializable {
@@ -16,6 +17,7 @@ public class Payload implements Serializable {
 	private Date mediaDate;
 	private List<String> mediaTags = new ArrayList<>();
 	private String mediaCaption;
+	@Transient
 	private MultipartFile image = null;
 	private String imageAsBase64 = "";
 

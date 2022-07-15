@@ -15,12 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pixels.mediaservices.dto.Payload;
 import com.pixels.mediaservices.exception.PostNotFoundException;
 import com.pixels.mediaservices.model.Media;
-import com.pixels.mediaservices.model.Payload;
 import com.pixels.mediaservices.service.MediaServiceImpl;
 
 @RestController
@@ -38,7 +37,7 @@ public class MediaController {
 				payload.getMediaCaption());
 		inputMedia.setMediaEncodedData(payload.getImageAsBase64());
 		mediaServiceImpl.addMedia(inputMedia);
-		return new ResponseEntity<String>("data has been added", HttpStatus.OK);
+		return new ResponseEntity<>("data has been added", HttpStatus.OK);
 	}
 
 	// REST End point local
@@ -58,16 +57,14 @@ public class MediaController {
 	}
 
 	// REST End point local
-	@RequestMapping(value = "/getAllMedia", method = RequestMethod.POST)
+	@PostMapping("/getAllMedia")
 	public List<Payload> getAllMediaOfOneUser(@RequestBody List<String> mediaIdList) throws PostNotFoundException {
 		List<Payload> outputArrayOfPayload = new ArrayList<>();
 		Media outputMedia;
 		Payload payload;
 		for (String mediaId : mediaIdList) {
 			Optional<Media> media = mediaServiceImpl.findMediaById(mediaId);
-			if (media.isEmpty()) {
-				continue;
-			} else {
+			if (media.isPresent()) {
 				outputMedia = media.get();
 				payload = new Payload(outputMedia.getMediaId(), outputMedia.getMediaDate(), outputMedia.getMediaTags(),
 						outputMedia.getMediaCaption(), outputMedia.getMediaEncodedData());
@@ -84,7 +81,7 @@ public class MediaController {
 			throw new PostNotFoundException();
 		}
 		mediaServiceImpl.deleteMedia(optionalMedia.get());
-		return new ResponseEntity<String>("data has been deleted", HttpStatus.OK);
+		return new ResponseEntity<>("data has been deleted", HttpStatus.OK);
 	}
 
 	@PatchMapping("/media-caption")
@@ -97,7 +94,7 @@ public class MediaController {
 		mediaToBeUpdated.setMediaCaption(payload.getMediaCaption());
 		mediaToBeUpdated.setMediaTags(payload.getMediaTags());
 		mediaServiceImpl.addMedia(mediaToBeUpdated);
-		return new ResponseEntity<String>("caption has been updated", HttpStatus.OK);
+		return new ResponseEntity<>("caption has been updated", HttpStatus.OK);
 	}
 
 }
