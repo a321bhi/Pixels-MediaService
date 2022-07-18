@@ -23,8 +23,8 @@ pipeline {
     stage('Deploy') {
       steps {
         bat 'docker build -t pixels-mediaservice .'
-        bat 'docker tag pixels-mediaservice abhi2104/pixels-mediaservice'
-        bat 'docker push abhi2104/pixels-mediaservice'
+        bat 'docker tag pixels-mediaservice abhi2104/pixels-mediaservice:latest'
+        bat 'docker push abhi2104/pixels-mediaservice:latest'
       }
     }
 
@@ -36,7 +36,7 @@ pipeline {
 
       }
       steps {
-        sh 'docker pull abhi2104/pixels-mediaservice'
+        sh 'docker pull abhi2104/pixels-mediaservice:latest'
       }
     }
 
