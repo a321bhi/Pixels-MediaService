@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,19 +15,35 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
+import org.springframework.web.reactive.function.client.WebClient;
 
+import com.pixels.mediaservices.dto.MediaResponse;
 import com.pixels.mediaservices.dto.Payload;
+import com.pixels.mediaservices.dto.SearchResult;
 import com.pixels.mediaservices.exception.PostNotFoundException;
+import com.pixels.mediaservices.model.FeedPreference;
 import com.pixels.mediaservices.model.Media;
+import com.pixels.mediaservices.service.FeedPreferenceServiceImpl;
 import com.pixels.mediaservices.service.MediaServiceImpl;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/service")
 //@CrossOrigin(origins = "*", allowedHeaders = { "*" })
 public class MediaController {
 
+	@Autowired
+	private WebClient.Builder webClientBuilder;
+	private String baseUrl = "http://userservice";
+	@Autowired
+	FeedPreferenceServiceImpl feedPreferenceServiceImpl;
 	@Autowired
 	MediaServiceImpl mediaServiceImpl;
 
@@ -96,4 +114,163 @@ public class MediaController {
 		return new ResponseEntity<>("caption has been updated", HttpStatus.OK);
 	}
 
+	@PostMapping("/feed-preference")
+	public ResponseEntity<String> setPreference(@RequestBody FeedPreference feedPreference) {
+		feedPreferenceServiceImpl.setPreference(feedPreference);
+		return new ResponseEntity<>("preference set", HttpStatus.OK);
+	}
+
+	@GetMapping("/feed-preference/{username}")
+	public FeedPreference updatePreference(@PathVariable String username) {
+
+		Optional<FeedPreference> feedPreferenceByUserIdOpt = feedPreferenceServiceImpl.getPreferenceById(username);
+		if (feedPreferenceByUserIdOpt.isPresent()) {
+			return feedPreferenceByUserIdOpt.get();
+		}
+		return new FeedPreference(username);
+	}
+
+	@GetMapping("/search/{query}")
+	public SearchResult getSearchResults(@PathVariable String query) {
+		List<Media> mediaTagsOutput = mediaServiceImpl.findTagsByQueryTag(query);
+//Comeplete this!!!!
+		// TODO List<String> usernameOutput =
+		// userServiceImpl.getUsernameBasedOnQuery(query);
+		List<String> mediaTags = new ArrayList<>();
+		mediaTagsOutput.stream().map(Media::getMediaTags).forEach(t -> {
+			for (String checkingForQueryString : t) {
+				if (checkingForQueryString.contains(query) && !mediaTags.contains(query)) {
+					mediaTags.add(checkingForQueryString);
+				}
+			}
+		});
+//TODO		SearchResult searchResult = new SearchResult(mediaTags, usernameOutput);
+		SearchResult searchResult = new SearchResult(mediaTags);
+		return searchResult;
+	}
+
+	@GetMapping("/feed-paginated/")
+	public List<MediaResponse> getFeedsPaginated(@RequestParam("page") int page, @RequestParam("size") int size,
+			@RequestParam("sortDir") String sortDir, @RequestParam("sort") String sort,
+			@RequestParam("tags") List<String> tags,
+			@RequestHeader("Authorization") String authorizationHeader) {
+		Page<Media> outputFeedPage = mediaServiceImpl.findByMediaTags(tags, page, size, sortDir, sort);
+		List<Media> outputFeed = outputFeedPage.getContent();
+		List<MediaResponse> listOfResponsePayload = new ArrayList<>();
+		if (!outputFeed.isEmpty()) {
+
+			List<Payload> outputPayload = new ArrayList<>();
+			for (Media output : outputFeed) {
+
+				Payload payload = new Payload(output.getMediaId(), output.getMediaDate(), output.getMediaTags(),
+						output.getMediaCaption(), output.getMediaEncodedData());
+				outputPayload.add(payload);
+			}
+
+			MediaResponse temporaryResponsePayload;
+
+			ExchangeStrategies strategies = ExchangeStrategies.builder()
+					.codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(-1)).build();
+			WebClient webClient = webClientBuilder.exchangeStrategies(strategies).baseUrl(baseUrl).build();
+
+			for (Payload tempPayload : outputPayload) {
+				temporaryResponsePayload = new MediaResponse(tempPayload);
+				Mono<MediaResponse> response = webClient.get().uri("/user/mappings/"+tempPayload.getMediaId())
+						 .header("Authorization", authorizationHeader).retrieve()
+						.bodyToMono(MediaResponse.class);
+				MediaResponse feedResponse = response.block();
+		
+				temporaryResponsePayload.setLikedBy(feedResponse.getLikedBy());
+				temporaryResponsePayload.setUsernamePostedBy(feedResponse.getUsernamePostedBy());
+				temporaryResponsePayload.setMediaComments(feedResponse.getMediaComments());
+				listOfResponsePayload.add(temporaryResponsePayload);
+			}
+			return listOfResponsePayload;
+		} else {
+			return new ArrayList<>();
+		}
+	}
+	@GetMapping("/feed-paginated-search/")
+	public List<MediaResponse> getFeedsPaginatedSearch(@RequestParam("page") int page, @RequestParam("size") int size,
+			@RequestParam("sortDir") String sortDir, @RequestParam("sort") String sort,
+			@RequestParam("tags") List<String> tags,
+			@RequestHeader("Authorization") String authorizationHeader) {
+		Page<Media> outputFeedPage = mediaServiceImpl.findByMediaTags(tags, page, size, sortDir, sort);
+		List<Media> outputFeed = outputFeedPage.getContent();
+		List<MediaResponse> listOfResponsePayload = new ArrayList<>();
+		if (!outputFeed.isEmpty()) {
+
+			List<Payload> outputPayload = new ArrayList<>();
+			for (Media output : outputFeed) {
+
+				Payload payload = new Payload(output.getMediaId(), output.getMediaDate(), output.getMediaTags(),
+						output.getMediaCaption(), output.getMediaEncodedData());
+				outputPayload.add(payload);
+			}
+
+			MediaResponse temporaryResponsePayload;
+
+			ExchangeStrategies strategies = ExchangeStrategies.builder()
+					.codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(-1)).build();
+			WebClient webClient = webClientBuilder.exchangeStrategies(strategies).baseUrl(baseUrl).build();
+
+			for (Payload tempPayload : outputPayload) {
+				temporaryResponsePayload = new MediaResponse(tempPayload);
+				Mono<MediaResponse> response = webClient.get().uri("/user/mappings/"+tempPayload.getMediaId())
+						 .header("Authorization", authorizationHeader).retrieve()
+						.bodyToMono(MediaResponse.class);
+				MediaResponse feedResponse = response.block();
+		
+				temporaryResponsePayload.setLikedBy(feedResponse.getLikedBy());
+				temporaryResponsePayload.setUsernamePostedBy(feedResponse.getUsernamePostedBy());
+				temporaryResponsePayload.setMediaComments(feedResponse.getMediaComments());
+				listOfResponsePayload.add(temporaryResponsePayload);
+			}
+			return listOfResponsePayload;
+		} else {
+			return new ArrayList<>();
+		}
+	}
+
+	@GetMapping(value = "/media-for-update/{mediaId}")
+	public MediaResponse getTags(@PathVariable String mediaId,@RequestHeader("Authorization") String authorizationHeader) {
+		Optional<Media> outputOpt = mediaServiceImpl.findMediaById(mediaId);
+		if (outputOpt.isPresent()) {
+			Media outputMedia = outputOpt.get();
+			Payload payload = new Payload(outputMedia.getMediaId(), outputMedia.getMediaDate(),
+					outputMedia.getMediaTags(), outputMedia.getMediaCaption(), outputMedia.getMediaEncodedData());
+
+			MediaResponse temporaryResponsePayload;
+
+			ExchangeStrategies strategies = ExchangeStrategies.builder()
+					.codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(-1)).build();
+			WebClient webClient = webClientBuilder.exchangeStrategies(strategies).baseUrl(baseUrl).build();
+
+			temporaryResponsePayload = new MediaResponse(payload);
+			Mono<MediaResponse> response = webClient.get().uri("/user/mappings/"+outputMedia.getMediaId())
+					 .header("Authorization", authorizationHeader)
+					 .retrieve()
+					.bodyToMono(new ParameterizedTypeReference<MediaResponse>() {
+					});
+			MediaResponse feedResponse = response.block();
+			
+			temporaryResponsePayload.setLikedBy(feedResponse.getLikedBy());
+			temporaryResponsePayload.setUsernamePostedBy(feedResponse.getUsernamePostedBy());
+			temporaryResponsePayload.setMediaComments(feedResponse.getMediaComments());
+			
+			return temporaryResponsePayload;
+		} else {
+			return new MediaResponse();
+		}
+	}
+
+	@GetMapping(value = "/tags")
+	public List<String> getTags() {
+		List<String> outputPayload = new ArrayList<>();
+		List<Media> output = mediaServiceImpl.getAllTags();
+		for (Media media : output) {
+			outputPayload.addAll(media.getMediaTags());
+		}
+		return outputPayload;
+	}
 }
