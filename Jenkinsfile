@@ -20,21 +20,22 @@ pipeline {
       }
     }
 
-    stage('Deploy') {
+    stage('Push to Hub') {
       steps {
         bat 'docker build -t pixels-mediaservice .'
         bat 'docker tag pixels-mediaservice abhi2104/pixels-mediaservice:latest'
         bat 'docker push abhi2104/pixels-mediaservice:latest'
       }
     }
-
-    stage('') {
+    
+    stage('Deploy') {
       agent {
         node {
           label 'jenkinsagent'
         }
 
       }
+      options { skipDefaultCheckout() }
       steps {
         sh 'docker pull abhi2104/pixels-mediaservice:latest'
       }
