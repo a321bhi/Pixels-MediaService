@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MediaResponse implements Serializable {
+public class MediaDTO implements Serializable {
 	/**
 	 * 
 	 */
@@ -19,17 +19,17 @@ public class MediaResponse implements Serializable {
 	private String imageAsBase64;
 	private Set<String> likedBy = new HashSet<>();
 	private Set<MediaCommentDTO> mediaComments = new HashSet<>();
-	private String usernamePostedBy;
+	private String mediaPostedBy;
 
-	public String getUsernamePostedBy() {
-		return usernamePostedBy;
+	public String getMediaPostedBy() {
+		return mediaPostedBy;
 	}
 
-	public void setUsernamePostedBy(String usernamePostedBy) {
-		this.usernamePostedBy = usernamePostedBy;
+	public void setMediaPostedBy(String mediaPostedBy) {
+		this.mediaPostedBy = mediaPostedBy;
 	}
 
-	public MediaResponse(String mediaId, Date mediaDate, List<String> mediaTags, String mediaCaption,
+	public MediaDTO(String mediaId, Date mediaDate, List<String> mediaTags, String mediaCaption,
 			String imageAsBase64) {
 		super();
 		this.mediaId = mediaId;
@@ -40,7 +40,7 @@ public class MediaResponse implements Serializable {
 
 	}
 
-	public MediaResponse(Payload payload) {
+	public MediaDTO(Payload payload) {
 		super();
 		this.mediaId = payload.getMediaId();
 		this.mediaDate = payload.getMediaDate();
@@ -71,7 +71,7 @@ public class MediaResponse implements Serializable {
 		this.mediaComments = mediaComments;
 	}
 
-	public MediaResponse(String mediaId, Date mediaDate, List<String> mediaTags, String mediaCaption,
+	public MediaDTO(String mediaId, Date mediaDate, List<String> mediaTags, String mediaCaption,
 			String imageAsBase64, Set<String> likedBy, Set<MediaCommentDTO> mediaComments) {
 		super();
 		this.mediaId = mediaId;
@@ -83,7 +83,7 @@ public class MediaResponse implements Serializable {
 		this.mediaComments = mediaComments;
 	}
 
-	public MediaResponse() {
+	public MediaDTO() {
 		super();
 	}
 

@@ -1,7 +1,6 @@
 package com.pixels.mediaservices.doa;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,8 +12,11 @@ import com.pixels.mediaservices.model.Media;
 
 @Repository
 public interface MediaRepository extends MongoRepository<Media, String> {
-	@Query("{ 'mediaTags':{$in:?0 }}")
-	public Optional<List<Media>> findByMediaTags(List<String> mediaTags);
+//	@Query("{ 'mediaTags':{$in:?0 }}")
+//	public List<Media> findByMediaTags(String tag);
+	@Query("{ 'mediaTags':/^?0/}")
+	public List<Media> findByMediaTags(String tag);
+
 
 	@Query(value = "{'mediaTags' : /^?0/}", fields = "{mediaTags : 1, _id : 0}")
 	public List<Media> findMediaTagsByQuery(String queryTag);

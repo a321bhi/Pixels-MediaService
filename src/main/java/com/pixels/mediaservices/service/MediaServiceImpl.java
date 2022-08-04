@@ -43,10 +43,10 @@ public class MediaServiceImpl implements MediaService {
 		return mediaRepository.findAll();
 	}
 
-	@Override
-	public Optional<List<Media>> findByMediaTags(List<String> mediaTags) {
-		return mediaRepository.findByMediaTags(mediaTags);
-	}
+//	@Override
+//	public Optional<List<Media>> findByMediaTags(List<String> mediaTags) {
+//		return mediaRepository.findByMediaTags(mediaTags);
+//	}
 
 	@Override
 	public List<Media> findTagsByQueryTag(String queryTag) {
@@ -65,6 +65,10 @@ public class MediaServiceImpl implements MediaService {
 
 		return mediaRepository.findByMediaTags(mediaTags, pageReq);
 
+	}
+
+	public List<Media> findByMediaTagsSearch(String tag) {
+		return mediaRepository.findByMediaTags(tag);
 	}
 
 }

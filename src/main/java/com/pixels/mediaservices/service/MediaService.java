@@ -19,12 +19,12 @@ public interface MediaService {
 
 	public List<Media> findAllMedia();
 
-	public Optional<List<Media>> findByMediaTags(List<String> mediaTags);
+	public List<Media> findByMediaTagsSearch(String mediaTags);
 
 	public List<Media> findTagsByQueryTag(String queryTag);
 
 	public List<Media> getAllTags();
 
-	Page<Media> findByMediaTags(List<String> mediaTags, int page, int size, String sortDir, String sort);
+	public Page<Media> findByMediaTags(List<String> mediaTags, int page, int size, String sortDir, String sort);
 
 }
