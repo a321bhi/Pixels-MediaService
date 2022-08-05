@@ -13,7 +13,7 @@ public class Media {
 
 	@Id
 	private String mediaId;
-	private Date mediaDate;
+	private Date createdAt;
 	private String mediaEncodedData = "";
 	private List<String> mediaTags = new ArrayList<>();
 	private String mediaCaption;
@@ -22,17 +22,17 @@ public class Media {
 		super();
 	}
 
-	public Media(String mediaId, Date mediaDate, List<String> mediaTags, String mediaCaption) {
+	public Media(String mediaId, Date createdAt, List<String> mediaTags, String mediaCaption) {
 		this.mediaId = mediaId;
-		this.mediaDate = mediaDate;
+		this.createdAt = createdAt;
 		this.mediaTags = mediaTags;
 		this.mediaCaption = mediaCaption;
 	}
 
-	public Media(String mediaId, Date mediaDate, String mediaEncodedData, List<String> mediaTags, String mediaCaption) {
+	public Media(String mediaId, Date createdAt, String mediaEncodedData, List<String> mediaTags, String mediaCaption) {
 		super();
 		this.mediaId = mediaId;
-		this.mediaDate = mediaDate;
+		this.createdAt = createdAt;
 		this.mediaEncodedData = mediaEncodedData;
 		this.mediaTags = mediaTags;
 		this.mediaCaption = mediaCaption;
@@ -40,7 +40,7 @@ public class Media {
 
 	@Override
 	public String toString() {
-		return "Media [mediaId=" + mediaId + ", mediaDate=" + mediaDate + " mediaTags=" + mediaTags + ", mediaCaption="
+		return "Media [mediaId=" + mediaId + ", createdAt=" + createdAt + " mediaTags=" + mediaTags + ", mediaCaption="
 				+ mediaCaption + "]";
 	}
 
@@ -85,12 +85,12 @@ public class Media {
 		this.mediaId = mediaId;
 	}
 
-	public Date getMediaDate() {
-		return mediaDate;
+	public Date getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setMediaDate(Date mediaDate) {
-		this.mediaDate = mediaDate;
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
 	}
 
 	public String getMediaEncodedData() {

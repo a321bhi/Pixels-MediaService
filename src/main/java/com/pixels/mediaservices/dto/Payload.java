@@ -13,25 +13,25 @@ public class Payload implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String mediaId;
-	private Date mediaDate;
+	private Date createdAt;
 	private List<String> mediaTags = new ArrayList<>();
 	private String mediaCaption;
 	private MultipartFile image = null;
 	private String imageAsBase64 = "";
 
-	public Payload(String mediaId, Date mediaDate, List<String> mediaTags, String mediaCaption, String imageAsBase64) {
+	public Payload(String mediaId, Date createdAt, List<String> mediaTags, String mediaCaption, String imageAsBase64) {
 		super();
 		this.mediaId = mediaId;
-		this.mediaDate = mediaDate;
+		this.createdAt = createdAt;
 		this.mediaTags = mediaTags;
 		this.mediaCaption = mediaCaption;
 		this.imageAsBase64 = imageAsBase64;
 	}
 
-	public Payload(String mediaId, Date mediaDate, List<String> mediaTags, String mediaCaption, MultipartFile image) {
+	public Payload(String mediaId, Date createdAt, List<String> mediaTags, String mediaCaption, MultipartFile image) {
 		super();
 		this.mediaId = mediaId;
-		this.mediaDate = mediaDate;
+		this.createdAt = createdAt;
 		this.mediaTags = mediaTags;
 		this.mediaCaption = mediaCaption;
 		this.image = image;
@@ -49,12 +49,12 @@ public class Payload implements Serializable {
 		this.mediaId = mediaId;
 	}
 
-	public Date getMediaDate() {
-		return mediaDate;
+	public Date getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setMediaDate(Date mediaDate) {
-		this.mediaDate = mediaDate;
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
 	}
 
 	public List<String> getMediaTags() {
@@ -75,7 +75,7 @@ public class Payload implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Payload [mediaId=" + mediaId + ", mediaDate=" + mediaDate + ", mediaTags=" + mediaTags
+		return "Payload [mediaId=" + mediaId + ", createdAt=" + createdAt + ", mediaTags=" + mediaTags
 				+ ", mediaCaption=" + mediaCaption + "]";
 	}
 

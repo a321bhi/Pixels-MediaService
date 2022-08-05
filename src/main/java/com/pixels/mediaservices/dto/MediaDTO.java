@@ -13,7 +13,8 @@ public class MediaDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String mediaId;
-	private Date mediaDate;
+//	private Date mediaDate;
+	private Date createdAt;
 	private List<String> mediaTags = new ArrayList<>();
 	private String mediaCaption;
 	private String imageAsBase64;
@@ -29,11 +30,11 @@ public class MediaDTO implements Serializable {
 		this.mediaPostedBy = mediaPostedBy;
 	}
 
-	public MediaDTO(String mediaId, Date mediaDate, List<String> mediaTags, String mediaCaption,
+	public MediaDTO(String mediaId, Date createdAt, List<String> mediaTags, String mediaCaption,
 			String imageAsBase64) {
 		super();
 		this.mediaId = mediaId;
-		this.mediaDate = mediaDate;
+		this.createdAt = createdAt;
 		this.mediaTags = mediaTags;
 		this.mediaCaption = mediaCaption;
 		this.imageAsBase64 = imageAsBase64;
@@ -43,7 +44,7 @@ public class MediaDTO implements Serializable {
 	public MediaDTO(Payload payload) {
 		super();
 		this.mediaId = payload.getMediaId();
-		this.mediaDate = payload.getMediaDate();
+		this.createdAt = payload.getCreatedAt();
 		this.mediaTags = payload.getMediaTags();
 		this.mediaCaption = payload.getMediaCaption();
 		this.imageAsBase64 = payload.getImageAsBase64();
@@ -51,7 +52,7 @@ public class MediaDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "ResponsePayload [mediaId=" + mediaId + ", mediaDate=" + mediaDate + ", mediaTags=" + mediaTags
+		return "ResponsePayload [mediaId=" + mediaId + ", createdAt=" + createdAt + ", mediaTags=" + mediaTags
 				+ ", mediaCaption=" + mediaCaption + ", likedBy=" + likedBy + ", mediaComments=" + mediaComments + "]";
 	}
 
@@ -71,11 +72,11 @@ public class MediaDTO implements Serializable {
 		this.mediaComments = mediaComments;
 	}
 
-	public MediaDTO(String mediaId, Date mediaDate, List<String> mediaTags, String mediaCaption,
+	public MediaDTO(String mediaId, Date createdAt, List<String> mediaTags, String mediaCaption,
 			String imageAsBase64, Set<String> likedBy, Set<MediaCommentDTO> mediaComments) {
 		super();
 		this.mediaId = mediaId;
-		this.mediaDate = mediaDate;
+		this.createdAt = createdAt;
 		this.mediaTags = mediaTags;
 		this.mediaCaption = mediaCaption;
 		this.imageAsBase64 = imageAsBase64;
@@ -95,12 +96,12 @@ public class MediaDTO implements Serializable {
 		this.mediaId = mediaId;
 	}
 
-	public Date getMediaDate() {
-		return mediaDate;
+	public Date getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setMediaDate(Date mediaDate) {
-		this.mediaDate = mediaDate;
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
 	}
 
 	public List<String> getMediaTags() {

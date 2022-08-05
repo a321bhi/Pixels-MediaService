@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,8 @@ public class MediaController {
 
 	@Autowired
 	private WebClient.Builder webClientBuilder;
-	private String baseUrl = "http://userservice";
+	@Value("${application.microservice.user}")
+	private String baseUrl;
 	@Autowired
 	FeedPreferenceServiceImpl feedPreferenceServiceImpl;
 	@Autowired
@@ -48,7 +50,7 @@ public class MediaController {
 	// REST End point local
 	@PostMapping("/media")
 	public ResponseEntity<String> uploadMedia(@RequestBody Payload payload) {
-		Media inputMedia = new Media(payload.getMediaId(), payload.getMediaDate(), payload.getMediaTags(),
+		Media inputMedia = new Media(payload.getMediaId(), payload.getCreatedAt(), payload.getMediaTags(),
 				payload.getMediaCaption());
 		inputMedia.setMediaEncodedData(payload.getImageAsBase64());
 		mediaServiceImpl.addMedia(inputMedia);
@@ -65,7 +67,7 @@ public class MediaController {
 			throw new PostNotFoundException();
 		} else {
 			outputMedia = media.get();
-			payload = new Payload(outputMedia.getMediaId(), outputMedia.getMediaDate(), outputMedia.getMediaTags(),
+			payload = new Payload(outputMedia.getMediaId(), outputMedia.getCreatedAt(), outputMedia.getMediaTags(),
 					outputMedia.getMediaCaption(), outputMedia.getMediaEncodedData());
 			return payload;
 		}
@@ -81,7 +83,7 @@ public class MediaController {
 			Optional<Media> media = mediaServiceImpl.findMediaById(mediaId);
 			if (media.isPresent()) {
 				outputMedia = media.get();
-				payload = new Payload(outputMedia.getMediaId(), outputMedia.getMediaDate(), outputMedia.getMediaTags(),
+				payload = new Payload(outputMedia.getMediaId(), outputMedia.getCreatedAt(), outputMedia.getMediaTags(),
 						outputMedia.getMediaCaption(), outputMedia.getMediaEncodedData());
 				outputArrayOfPayload.add(payload);
 			}
@@ -155,7 +157,7 @@ public class MediaController {
 			List<Payload> outputPayload = new ArrayList<>();
 			for (Media output : outputFeed) {
 
-				Payload payload = new Payload(output.getMediaId(), output.getMediaDate(), output.getMediaTags(),
+				Payload payload = new Payload(output.getMediaId(), output.getCreatedAt(), output.getMediaTags(),
 						output.getMediaCaption(), output.getMediaEncodedData());
 				outputPayload.add(payload);
 			}
@@ -196,7 +198,7 @@ public class MediaController {
 			List<Payload> outputPayload = new ArrayList<>();
 			for (Media output : outputFeed) {
 
-				Payload payload = new Payload(output.getMediaId(), output.getMediaDate(), output.getMediaTags(),
+				Payload payload = new Payload(output.getMediaId(), output.getCreatedAt(), output.getMediaTags(),
 						output.getMediaCaption(), output.getMediaEncodedData());
 				outputPayload.add(payload);
 			}
@@ -234,7 +236,7 @@ public class MediaController {
 			List<Payload> outputPayload = new ArrayList<>();
 			for (Media output : outputFeed) {
 
-				Payload payload = new Payload(output.getMediaId(), output.getMediaDate(), output.getMediaTags(),
+				Payload payload = new Payload(output.getMediaId(), output.getCreatedAt(), output.getMediaTags(),
 						output.getMediaCaption(), output.getMediaEncodedData());
 				outputPayload.add(payload);
 			}
@@ -267,7 +269,7 @@ public class MediaController {
 		Optional<Media> outputOpt = mediaServiceImpl.findMediaById(mediaId);
 		if (outputOpt.isPresent()) {
 			Media outputMedia = outputOpt.get();
-			Payload payload = new Payload(outputMedia.getMediaId(), outputMedia.getMediaDate(),
+			Payload payload = new Payload(outputMedia.getMediaId(), outputMedia.getCreatedAt(),
 					outputMedia.getMediaTags(), outputMedia.getMediaCaption(), outputMedia.getMediaEncodedData());
 
 			MediaDTO temporaryResponsePayload;
